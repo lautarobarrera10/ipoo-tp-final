@@ -1,10 +1,10 @@
 <?php
 
-include "Database.php";
-include "ResponsableV.php";
-include "Empresa.php";
-include "Viaje.php";
-include "Pasajero.php";
+include_once "Database.php";
+include_once "ResponsableV.php";
+include_once "Empresa.php";
+include_once "Viaje.php";
+include_once "Pasajero.php";
 
 class TestViajes {
 
