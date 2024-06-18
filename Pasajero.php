@@ -4,9 +4,11 @@
 
 // La clase Pasajero tiene como atributos el nombre, el número de asiento y el número de ticket del pasaje del viaje.
 
-Class Pasajero {
-    private $nombre;
-    private $apellido;
+
+class Pasajero extends Persona
+{
+    // private $nombre;
+    // private $apellido;
     private $numeroDeDocumento;
     private $telefono;
     private $numeroDeAsiento;
@@ -14,9 +16,11 @@ Class Pasajero {
     private $idViaje;
     private $mensajeoperacion;
 
-    public function __construct(){
-        $this->nombre = "";
-        $this->apellido = "";
+    public function __construct($nombre, $apellido, $documento)
+    {
+        parent::__construct($nombre, $apellido, $documento);
+        // $this->nombre = "";
+        // $this->apellido = "";
         $this->numeroDeDocumento = 0;
         $this->telefono = 0;
         $this->numeroDeAsiento = 0;
@@ -24,7 +28,8 @@ Class Pasajero {
         $this->idViaje = 0;
     }
 
-    public function cargar(string $nombre, string $apellido, int $numeroDeDocumento, int $telefono, int $numeroDeAsiento, int $numeroDeTicket, int $idViaje){
+    public function cargar( $nombre,  $apellido,  $numeroDeDocumento,  $telefono,  $numeroDeAsiento,  $numeroDeTicket,  $idViaje)
+    {
         $this->setNombre($nombre);
         $this->setApellido($apellido);
         $this->setNumeroDeDocumento($numeroDeDocumento);
@@ -34,7 +39,10 @@ Class Pasajero {
         $this->setIdViaje($idViaje);
     }
 
-    public function insertar(){
+
+
+    public function insertar()
+    {
         $database = new Database;
         $resp = false;
         $consultaInsertar = "INSERT INTO pasajero (pdocumento, pnombre, papellido, ptelefono, idviaje) 
@@ -46,9 +54,9 @@ Class Pasajero {
                     " . $this->getIdViaje() . ",
                     )";
 
-        if($database->iniciar()){
-            if($database->ejecutar($consultaInsertar)){
-                $resp=  true;
+        if ($database->iniciar()) {
+            if ($database->ejecutar($consultaInsertar)) {
+                $resp =  true;
             } else {
                 $this->setMensajeoperacion($database->getError());
             }
@@ -58,81 +66,94 @@ Class Pasajero {
         return $resp;
     }
 
-    public function getNombre(){
-        return $this->nombre;
-    }
+    // public function getNombre(){
+    //     return $this->nombre;
+    // }
 
-    public function setNombre($value){
-        $this->nombre = $value;
-    }
+    // public function setNombre($value){
+    //     $this->nombre = $value;
+    // }
 
-    public function getApellido(){
-        return $this->apellido;
-    }
+    // public function getApellido(){
+    //     return $this->apellido;
+    // }
 
-    public function setApellido($value){
-        $this->apellido = $value;
-    }
+    // public function setApellido($value){
+    //     $this->apellido = $value;
+    // }
 
-    public function getNumeroDeDocumento(){
+    public function getNumeroDeDocumento()
+    {
         return $this->numeroDeDocumento;
     }
 
-    public function setNumeroDeDocumento($value){
+    public function setNumeroDeDocumento($value)
+    {
         $this->numeroDeDocumento = $value;
     }
 
-    public function getTelefono(){
+    public function getTelefono()
+    {
         return $this->telefono;
     }
 
-    public function setTelefono($value){
+    public function setTelefono($value)
+    {
         $this->telefono = $value;
     }
 
-    public function getNumeroDeAsiento(){
+    public function getNumeroDeAsiento()
+    {
         return $this->numeroDeAsiento;
     }
 
-    public function setNumeroDeAsiento($value){
+    public function setNumeroDeAsiento($value)
+    {
         $this->numeroDeAsiento = $value;
     }
 
-    public function getNumeroDeTicket(){
+    public function getNumeroDeTicket()
+    {
         return $this->numeroDeTicket;
     }
 
-    public function setNumeroDeTicket($value){
+    public function setNumeroDeTicket($value)
+    {
         $this->numeroDeTicket = $value;
     }
 
-    public function getIdViaje(){
+    public function getIdViaje()
+    {
         return $this->idViaje;
     }
 
-    public function setIdViaje($value){
+    public function setIdViaje($value)
+    {
         $this->idViaje = $value;
     }
 
-    public function getMensajeoperacion(){
+    public function getMensajeoperacion()
+    {
         return $this->mensajeoperacion;
     }
 
-    public function setMensajeoperacion($mensaje){
+    public function setMensajeoperacion($mensaje)
+    {
         $this->mensajeoperacion = $mensaje;
     }
 
-    public function __toString(){
-        return
-        "Nombre: " . $this->getNombre() . "\n" .
-        "Apellido: " . $this->getApellido() . "\n" .
-        "Número de documento: " . $this->getNumeroDeDocumento() . "\n" .
-        "Teléfono: " . $this->getTelefono() . "\n" .
-        "Número de asiento: " . $this->getNumeroDeAsiento() . "\n" .
-        "Número de ticket: " . $this->getNumeroDeTicket() . "\n";
+    public function __toString()
+    {
+        $cadena = parent::__toString();
+        $cadena .= "Número de documento: " . $this->getNumeroDeDocumento() . "\n" .
+            "Teléfono: " . $this->getTelefono() . "\n" .
+            "Número de asiento: " . $this->getNumeroDeAsiento() . "\n" .
+            "Número de ticket: " . $this->getNumeroDeTicket() . "\n";
+        return $cadena;
     }
 
-    public function darPorcentajeIncremento(){
+    public function darPorcentajeIncremento()
+    {
         $porcentaje = 0;
         return $porcentaje;
     }
