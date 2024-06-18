@@ -33,7 +33,7 @@ class ResponsableV extends Persona
     {
         $database = new Database;
         $resp = false;
-        $consultaInsertar = "INSERT INTO responsable(rnumerolicencia, rnombre, rapellido) VALUES (" . $this->getNumeroDeLicencia() . ",'" . $this->getNombre() . "','" . $this->getApellido() . "')";
+        $consultaInsertar = "INSERT INTO responsable(rnumerolicencia, rnombre, rapellido,rdocumento) VALUES (" . $this->getNumeroDeLicencia() . ",'" . $this->getNombre() . "','" . $this->getApellido() . "," . $this->getDocumento(). "')";
 
         if ($database->iniciar()) {
 

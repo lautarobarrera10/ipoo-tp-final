@@ -53,7 +53,9 @@ class Persona
     public function __toString()
     {
         return "Nombre: " . $this->getNombre() . "\n" .
-            "Apellido: " . $this->getApellido() . "\n";
+            "Apellido: " . $this->getApellido() . "\n".
+            "Documento: " . $this->getDocumento() . "\n";
+
     }
 
 // se declaran todas las variables porque sino salta error de tipado en la funcion cargar de pasajero y responsableV

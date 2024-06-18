@@ -145,8 +145,7 @@ class Pasajero extends Persona
     public function __toString()
     {
         $cadena = parent::__toString();
-        $cadena .= "Número de documento: " . $this->getNumeroDeDocumento() . "\n" .
-            "Teléfono: " . $this->getTelefono() . "\n" .
+        $cadena .=  "Teléfono: " . $this->getTelefono() . "\n" .
             "Número de asiento: " . $this->getNumeroDeAsiento() . "\n" .
             "Número de ticket: " . $this->getNumeroDeTicket() . "\n";
         return $cadena;
