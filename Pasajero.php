@@ -7,35 +7,22 @@
 
 class Pasajero extends Persona
 {
-    // private $nombre;
-    // private $apellido;
-    private $numeroDeDocumento;
     private $telefono;
-    private $numeroDeAsiento;
-    private $numeroDeTicket;
     private $idViaje;
     private $mensajeoperacion;
 
-    public function __construct($nombre, $apellido, $documento)
+    public function __construct()
     {
-        parent::__construct($nombre, $apellido, $documento);
-        // $this->nombre = "";
-        // $this->apellido = "";
-        $this->numeroDeDocumento = 0;
+        parent::__construct();
         $this->telefono = 0;
-        $this->numeroDeAsiento = 0;
-        $this->numeroDeTicket = 0;
         $this->idViaje = 0;
     }
 
-    public function cargar( $nombre,  $apellido,  $numeroDeDocumento,  $telefono,  $numeroDeAsiento,  $numeroDeTicket,  $idViaje)
+
+    public function cargar($nombre, $apellido, $documento, $telefono, $idViaje)
     {
-        $this->setNombre($nombre);
-        $this->setApellido($apellido);
-        $this->setNumeroDeDocumento($numeroDeDocumento);
+        parent::cargar($nombre, $apellido, $documento);
         $this->setTelefono($telefono);
-        $this->setNumeroDeAsiento($numeroDeAsiento);
-        $this->setNumeroDeTicket($numeroDeTicket);
         $this->setIdViaje($idViaje);
     }
 
@@ -45,52 +32,27 @@ class Pasajero extends Persona
     {
         $database = new Database;
         $resp = false;
-        $consultaInsertar = "INSERT INTO pasajero (pdocumento, pnombre, papellido, ptelefono, idviaje) 
-                    VALUES (
-                    '" . $this->getNumeroDeDocumento() . "',
-                    '" . $this->getNombre() . "',
-                    '" . $this->getApellido() . "',
-                    " . $this->getTelefono() . ",
-                    " . $this->getIdViaje() . ",
-                    )";
+        if (parent::insertar()){
+            $consulta = "INSERT INTO pasajero(pdocumento, ptelefono, idviaje) VALUES (
+            '". $this->getDocumento() ."',
+            '". $this->getTelefono() ."',
+            '". $this->getIdViaje() ."'
+            )";
 
-        if ($database->iniciar()) {
-            if ($database->ejecutar($consultaInsertar)) {
-                $resp =  true;
+            if ($database->iniciar()) {
+                if ($database->ejecutar($consulta)) {
+                    $resp =  true;
+                } else {
+                    $this->setMensajeoperacion($database->getError());
+                }
             } else {
                 $this->setMensajeoperacion($database->getError());
             }
-        } else {
-            $this->setMensajeoperacion($database->getError());
         }
+
         return $resp;
     }
 
-    // public function getNombre(){
-    //     return $this->nombre;
-    // }
-
-    // public function setNombre($value){
-    //     $this->nombre = $value;
-    // }
-
-    // public function getApellido(){
-    //     return $this->apellido;
-    // }
-
-    // public function setApellido($value){
-    //     $this->apellido = $value;
-    // }
-
-    public function getNumeroDeDocumento()
-    {
-        return $this->numeroDeDocumento;
-    }
-
-    public function setNumeroDeDocumento($value)
-    {
-        $this->numeroDeDocumento = $value;
-    }
 
     public function getTelefono()
     {
@@ -100,26 +62,6 @@ class Pasajero extends Persona
     public function setTelefono($value)
     {
         $this->telefono = $value;
-    }
-
-    public function getNumeroDeAsiento()
-    {
-        return $this->numeroDeAsiento;
-    }
-
-    public function setNumeroDeAsiento($value)
-    {
-        $this->numeroDeAsiento = $value;
-    }
-
-    public function getNumeroDeTicket()
-    {
-        return $this->numeroDeTicket;
-    }
-
-    public function setNumeroDeTicket($value)
-    {
-        $this->numeroDeTicket = $value;
     }
 
     public function getIdViaje()
@@ -146,8 +88,7 @@ class Pasajero extends Persona
     {
         $cadena = parent::__toString();
         $cadena .=  "Teléfono: " . $this->getTelefono() . "\n" .
-            "Número de asiento: " . $this->getNumeroDeAsiento() . "\n" .
-            "Número de ticket: " . $this->getNumeroDeTicket() . "\n";
+            "Id de viaje: " . $this->getIdViaje() . "\n";
         return $cadena;
     }
 

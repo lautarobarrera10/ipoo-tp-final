@@ -1,8 +1,12 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 include_once "Database.php";
 include_once "Persona.php";
-// include_once "ResponsableV.php";
+include_once "ResponsableV.php";
 // include_once "Empresa.php";
 // include_once "Viaje.php";
 // include_once "Pasajero.php";
@@ -270,8 +274,8 @@ include_once "Persona.php";
 //     }
 // }
 
-// TestViajes::showMenu();
-// TestViajes::agregarPasajero("Lautaro", "Barrera", "41421435", "2995506358", 1, 1, 4);
-$nuevaPersona = new Persona;
-$nuevaPersona->buscar('41421435');
-$nuevaPersona->eliminar();
+
+
+$responsable = new ResponsableV;
+$responsable->buscar(1);
+$responsable->eliminar();
