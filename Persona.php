@@ -6,14 +6,11 @@ class Persona
     private $documento;
     private $mensajeoperacion;
 
-
-
-    public function __construct($nombre, $apellido, $documento)
+    public function __construct()
     {
-
-        $this->nombre = $nombre;
-        $this->apellido = $apellido;
-        $this->documento = $documento;
+        $this->nombre = "";
+        $this->apellido = "";
+        $this->documento = "";
     }
 
     public function getNombre()
@@ -45,6 +42,11 @@ class Persona
         $this->documento = $value;
     }
 
+    public function getMensajeoperacion()
+    {
+        return $this->mensajeoperacion;
+    }
+
     public function setMensajeoperacion($mensaje)
     {
         $this->mensajeoperacion = $mensaje;
@@ -58,29 +60,26 @@ class Persona
 
     }
 
-// se declaran todas las variables porque sino salta error de tipado en la funcion cargar de pasajero y responsableV
-    // carga los datos de la persona a la base de datos
-    // public function cargar( $nombre,  $apellido,  $documento, $telefono,  $numeroDeAsiento,  $numeroDeTicket,  $idViaje)
-    public function cargar($nombre,  $apellido,  $documento, $telefono,  $numeroDeAsiento,  $numeroDeTicket,  $idViaje)
+    public function cargar($nombre,  $apellido,  $documento)
     {
         $this->setNombre($nombre);
         $this->setApellido($apellido);
         $this->setDocumento($documento);
     }
 
-
-
-    // consultar con kathe porque tantos errores  revisar 
     public function insertar()
     {
         $database = new Database;
         $persona = false;
-        $consultaInsertar = "INSERT INTO persona(nombre, apellido ,documento) VALUES ("  . $this->getNombre() . "," . $this->getApellido() . "," . $this->getDocumento() .")";
+        $consultaInsertar = "INSERT INTO persona(nombre, apellido ,documento) VALUES (
+        '"  . $this->getNombre() . "',
+        '" . $this->getApellido() . "',
+        '" . $this->getDocumento() . "'
+        )";
 
         if ($database->iniciar()) {
 
-            if ($id = $database->devuelveIDInsercion($consultaInsertar)) {
-                // $this->setNumeroDeEmpleado($id);
+            if ($database->ejecutar($consultaInsertar)) {
                 $persona =  true;
             } else {
                 $this->setMensajeoperacion($database->getError());
@@ -91,15 +90,15 @@ class Persona
         return $persona;
     }
 
-    // salta error en el mensajeoperacion get error  revisar where y funcion completa 
     public function buscar($documento)
     {
         $database = new Database;
-        $consulta = "SELECT * FROM persona WHERE documento = ". $documento;
+        $consulta = "SELECT * FROM persona WHERE documento = '". $documento ."'";
         $rta = false;
         if ($database->iniciar()) {
             if ($database->ejecutar($consulta)) {
                 if ($persona = $database->registro()) {
+                    $this->setDocumento($persona['documento']);
                     $this->setNombre($persona['nombre']);
                     $this->setApellido($persona['apellido']);
                     $rta = true;
@@ -120,8 +119,8 @@ class Persona
         $consulta = "UPDATE persona SET 
                     nombre = '" . $this->getNombre() . "',
                     apellido = '" . $this->getApellido() . "' 
-                    WHERE documento = " . $this->getDocumento();
-            $rta = false;
+                    WHERE documento = '" . $this->getDocumento() . "'";
+        $rta = false;
         if ($database->iniciar()) {
             if ($database->ejecutar($consulta)) {
                 $rta = true;
@@ -139,8 +138,7 @@ class Persona
     public function eliminar()
     {
         $database = new Database;
-        //controlar el where revisar 
-        $consulta = "DELETE FROM Persona WHERE documento = " . $this->getDocumento();
+        $consulta = "DELETE FROM Persona WHERE documento = '" . $this->getDocumento() . "'";
         $rta = false;
         if ($database->iniciar()) {
             if ($database->ejecutar($consulta)) {
