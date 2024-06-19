@@ -230,7 +230,7 @@ Class Viaje {
             $pasajeroRepetido = false;
             $i = 0;
             while (!$pasajeroRepetido && $i < count($colPasajeros)){
-                if ($colPasajeros[$i]->getNumeroDeDocumento() == $pasajero->getNumeroDeDocumento()){
+                if ($colPasajeros[$i]->getDocumento() == $pasajero->getDocumento()){
                     $pasajeroRepetido = true;
                 }
                 $i++;

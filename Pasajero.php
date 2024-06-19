@@ -19,7 +19,7 @@ class Pasajero extends Persona
     }
 
 
-    public function cargar($nombre, $apellido, $documento, $telefono, $idViaje)
+    public function cargar($nombre, $apellido, $documento, $telefono = 0, $idViaje = 0)
     {
         parent::cargar($nombre, $apellido, $documento);
         $this->setTelefono($telefono);
@@ -35,8 +35,8 @@ class Pasajero extends Persona
         if (parent::insertar()){
             $consulta = "INSERT INTO pasajero(pdocumento, ptelefono, idviaje) VALUES (
             '". $this->getDocumento() ."',
-            '". $this->getTelefono() ."',
-            '". $this->getIdViaje() ."'
+            ". $this->getTelefono() .",
+            ". $this->getIdViaje() ."
             )";
 
             if ($database->iniciar()) {
@@ -51,6 +51,68 @@ class Pasajero extends Persona
         }
 
         return $resp;
+    }
+
+    public function buscar($documento){
+        $database = new Database;
+        $consulta = "SELECT * FROM pasajero WHERE pdocumento='" . $documento . "'";
+        $rta = false;
+        if ($database->iniciar()) {
+            if ($database->ejecutar($consulta)) {
+                if ($pasajero = $database->registro()) {
+                    parent::buscar($pasajero['pdocumento']);
+                    $this->setTelefono($pasajero['ptelefono']);
+                    $this->setIdViaje($pasajero['idviaje']);
+                    $rta = true;
+                }
+            } else {
+                $this->setMensajeoperacion($database->getError());
+            }
+        } else {
+            $this->setMensajeoperacion($database->getError());
+        }
+        return $rta;
+    }
+
+    public function modificar()
+    {
+        $database = new Database;
+        $rta = false;
+        if (parent::modificar()){
+            $consulta = "UPDATE pasajero SET 
+            ptelefono = " . $this->getTelefono() . ",
+            idviaje = " . $this->getIdViaje() .
+            " WHERE pdocumento = ". $this->getDocumento();
+
+            if ($database->iniciar()) {
+                if ($database->ejecutar($consulta)) {
+                    $rta = true;
+                } else {
+                    $this->setMensajeoperacion($database->getError());
+                }
+            } else {
+                $this->setMensajeoperacion($database->getError());
+            }
+        }
+        
+        return $rta;
+    }
+
+    public function eliminar()
+    {
+        $database = new Database;
+        $consulta = "DELETE FROM pasajero WHERE pdocumento = '" . $this->getDocumento() . "'";
+        $rta = false;
+        if ($database->iniciar()) {
+            if ($database->ejecutar($consulta)) {
+                $rta = true;
+            } else {
+                $this->setMensajeoperacion($database->getError());
+            }
+        } else {
+            $this->setMensajeoperacion($database->getError());
+        }
+        return $rta;
     }
 
 

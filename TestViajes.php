@@ -7,9 +7,9 @@ error_reporting(E_ALL);
 include_once "Database.php";
 include_once "Persona.php";
 include_once "ResponsableV.php";
-// include_once "Empresa.php";
-// include_once "Viaje.php";
-// include_once "Pasajero.php";
+include_once "Empresa.php";
+include_once "Viaje.php";
+include_once "Pasajero.php";
 
 // class TestViajes {
 
@@ -274,8 +274,16 @@ include_once "ResponsableV.php";
 //     }
 // }
 
-
+$empresa = new Empresa;
+$empresa->buscar(1);
 
 $responsable = new ResponsableV;
-$responsable->buscar(1);
-$responsable->eliminar();
+$responsable->buscar(3);
+
+$viaje = new Viaje;
+$viaje->buscar(1);
+
+$pasajero = new Pasajero;
+$pasajero->buscar("35563245");
+$pasajero->eliminar();
+
