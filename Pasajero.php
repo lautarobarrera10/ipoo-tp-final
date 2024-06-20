@@ -115,6 +115,38 @@ class Pasajero extends Persona
         return $rta;
     }
 
+    public function listar($condicion = ""){
+        $arregloPasajero = null;
+        $database = new Database;
+        $consulta = "SELECT * FROM pasajero INNER JOIN persona ON persona.documento = pasajero.pdocumento ";
+        if ($condicion != ""){
+            $consulta .= "WHERE $condicion ";
+        }
+        $consulta .= "ORDER BY pdocumento";
+
+        if ($database->iniciar()){
+            if ($database->ejecutar($consulta)){
+                $arregloPasajero = [];
+                while ($pasajeroEncontrado = $database->registro()){
+                    $pasajero = new self;
+                    $pasajero->cargar(
+                        $pasajeroEncontrado["nombre"],
+                        $pasajeroEncontrado["apellido"],
+                        $pasajeroEncontrado["pdocumento"],
+                        $pasajeroEncontrado["ptelefono"],
+                        $pasajeroEncontrado["idviaje"]
+                    );
+                    array_push($arregloPasajero, $pasajero);
+                }
+            } else {
+                $this->setMensajeoperacion($database->getError());
+            }
+        } else {
+            $this->setMensajeoperacion($database->getError());
+        }
+
+        return $arregloPasajero;
+    }
 
     public function getTelefono()
     {

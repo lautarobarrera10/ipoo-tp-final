@@ -304,9 +304,9 @@ class TestViajes {
 
 // TestViajes::showMenu();
 
-$persona = new Persona;
-$personas = $persona->listar("apellido = 'barrea'");
+$pasajero = new Pasajero;
+$pasajeros = $pasajero->listar();
 
-foreach ($personas as $persona) {
-    echo $persona;
+foreach ($pasajeros as $pasajero) {
+    echo "\n$pasajero";
 }
