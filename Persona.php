@@ -151,4 +151,35 @@ class Persona
         }
         return $rta;
     }
+
+    public function listar($condicion = ""){
+        $arregloPersona = null;
+        $database = new Database;
+        $consulta = "SELECT * FROM persona ";
+        if ($condicion != ""){
+            $consulta .= "WHERE $condicion ";
+        }
+        $consulta .= "ORDER BY apellido";
+
+        if ($database->iniciar()){
+            if ($database->ejecutar($consulta)){
+                $arregloPersona = [];
+                while ($personaEncontrada = $database->registro()){
+                    $persona = new self;
+                    $persona->cargar(
+                        $personaEncontrada["nombre"],
+                        $personaEncontrada["apellido"],
+                        $personaEncontrada["documento"]
+                    );
+                    array_push($arregloPersona, $persona);
+                }
+            } else {
+                $this->setMensajeoperacion($database->getError());
+            }
+        } else {
+            $this->setMensajeoperacion($database->getError());
+        }
+
+        return $arregloPersona;
+    }
 }

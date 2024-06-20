@@ -302,4 +302,11 @@ class TestViajes {
     // Falta el menú y la funcion para modificar y eliminar pasajeros :)
 }
 
-TestViajes::showMenu();
+// TestViajes::showMenu();
+
+$persona = new Persona;
+$personas = $persona->listar("apellido = 'barrea'");
+
+foreach ($personas as $persona) {
+    echo $persona;
+}
