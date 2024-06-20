@@ -108,6 +108,39 @@ class ResponsableV extends Persona
         return $rta;
     }
 
+    public function listar($condicion = ""){
+        $arregloResponsables = null;
+        $database = new Database;
+        $consulta = "SELECT * FROM responsable INNER JOIN persona ON persona.documento = responsable.rdocumento ";
+        if ($condicion != ""){
+            $consulta .= "WHERE $condicion ";
+        }
+        $consulta .= "ORDER BY rdocumento";
+
+        if ($database->iniciar()){
+            if ($database->ejecutar($consulta)){
+                $arregloResponsables = [];
+                while ($responsableEncontrado = $database->registro()){
+                    $responsable = new self;
+                    $responsable->cargar(
+                        $responsableEncontrado["nombre"],
+                        $responsableEncontrado["apellido"],
+                        $responsableEncontrado["rdocumento"],
+                        $responsableEncontrado["rnumerolicencia"]
+                    );
+                    $responsable->setNumeroDeEmpleado($responsableEncontrado["rnumeroempleado"]);
+                    array_push($arregloResponsables, $responsable);
+                }
+            } else {
+                $this->setMensajeoperacion($database->getError());
+            }
+        } else {
+            $this->setMensajeoperacion($database->getError());
+        }
+
+        return $arregloResponsables;
+    }
+
     public function getNumeroDeEmpleado()
     {
         return $this->numeroDeEmpleado;
