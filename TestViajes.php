@@ -304,9 +304,9 @@ class TestViajes {
 
 // TestViajes::showMenu();
 
-$responsable = new ResponsableV;
-$responsables = $responsable->listar("apellido = 'lujan'");
+$empresa = new Empresa;
+$empresas = $empresa->listar();
 
-foreach ($responsables as $responsable) {
-    echo "\n$responsable";
+foreach ($empresas as $empresa) {
+    echo "\n$empresa";
 }

@@ -128,4 +128,35 @@ class Empresa {
         }
         return $rta;
     }
+
+    public function listar($condicion = ""){
+        $arregloEmpresa = null;
+        $database = new Database;
+        $consulta = "SELECT * FROM empresa ";
+        if ($condicion != ""){
+            $consulta .= "WHERE $condicion ";
+        }
+        $consulta .= "ORDER BY enombre";
+
+        if ($database->iniciar()){
+            if ($database->ejecutar($consulta)){
+                $arregloEmpresa = [];
+                while ($empresaEncontrada = $database->registro()){
+                    $empresa = new self;
+                    $empresa->cargar(
+                        $empresaEncontrada["enombre"],
+                        $empresaEncontrada["edireccion"]
+                    );
+                    $empresa->setId($empresaEncontrada["idempresa"]);
+                    array_push($arregloEmpresa, $empresa);
+                }
+            } else {
+                $this->setMensajeoperacion($database->getError());
+            }
+        } else {
+            $this->setMensajeoperacion($database->getError());
+        }
+
+        return $arregloEmpresa;
+    }
 }
