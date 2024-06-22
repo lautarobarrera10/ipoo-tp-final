@@ -389,11 +389,5 @@ class TestViajes
     }
 }
 
-// TestViajes::showMenu();
+TestViajes::showMenu();
 
-$viaje = new Viaje;
-$viajes = $viaje->listar();
-
-foreach ($viajes as $viaje) {
-    echo "\n$viaje";
-}
