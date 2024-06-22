@@ -18,9 +18,10 @@ class Pasajero extends Persona
         $this->idViaje = 0;
     }
 
-
+// este metodo carga los datos del pasajero en la base de datos
     public function cargar($nombre, $apellido, $documento, $telefono = 0, $idViaje = 0)
     {
+        // llama a los metodos de la clase padre
         parent::cargar($nombre, $apellido, $documento);
         $this->setTelefono($telefono);
         $this->setIdViaje($idViaje);
