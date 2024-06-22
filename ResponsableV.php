@@ -17,6 +17,7 @@ class ResponsableV extends Persona
 
     public function cargar($nombre, $apellido, $documento, $numeroDeLicencia = 0)
     {
+        // llama a los metodos de la clase padre y se le agrega el numero de licencia
         parent::cargar($nombre, $apellido, $documento);
         $this->setNumeroDeLicencia($numeroDeLicencia);
     }
