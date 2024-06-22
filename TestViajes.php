@@ -20,61 +20,86 @@ class TestViajes
     {
         echo "\n Bienvenido al administrador de viajes \n " .
             " ¿Qué quieres hacer hoy? \n " .
-            "   1) Agregar empresa \n " .
-            "   2) Modificar empresa \n " .
-            "   3) Eliminar empresa \n " .
-            "   4) Agregar responsable \n " .
-            "   5) Modificar responsable \n " .
-            "   6) Eliminar responsable \n " .
-            "   7) Agregar viaje \n " .
-            "   8) Modificar viaje \n " .
-            "   9) Eliminar viaje \n " .
-            "   10) Agregar pasajero \n " .
-            "   11) Modificar pasajero \n " .
-            "   12) Eliminar pasajero \n";
+            "   1) Ver empresas \n " .
+            "   2) Agregar empresa \n " .
+            "   3) Modificar empresa \n " .
+            "   4) Eliminar empresa \n " .
+            "   5) Ver responsables \n " .
+            "   6) Agregar responsable \n " .
+            "   7) Modificar responsable \n " .
+            "   8) Eliminar responsable \n " .
+            "   9) Ver viajes \n " .
+            "   10) Agregar viaje \n " .
+            "   11) Modificar viaje \n " .
+            "   12) Eliminar viaje \n " .
+            "   13) Ver pasajeros \n " .
+            "   14) Agregar pasajero \n " .
+            "   15) Modificar pasajero \n " .
+            "   16) Eliminar pasajero \n";
 
         echo "Opción ingresada: ";
         $opcion = trim(fgets(STDIN));
         switch ($opcion) {
             case 1:
-                TestViajes::menuAgregarEmpresa();
+                TestViajes::mostrarEmpresas();
                 break;
             case 2:
-                TestViajes::menuModificarEmpresa();
+                TestViajes::menuAgregarEmpresa();
                 break;
             case 3:
-                TestViajes::menuEliminarEmpresa();
+                TestViajes::menuModificarEmpresa();
                 break;
             case 4:
-                TestViajes::menuAgregarResponsable();
+                TestViajes::menuEliminarEmpresa();
                 break;
             case 5:
-                TestViajes::menuModificarResponsable();
+                TestViajes::mostrarResponsables();
                 break;
             case 6:
-                TestViajes::menuEliminarResponsable();
+                TestViajes::menuAgregarResponsable();
                 break;
             case 7:
-                TestViajes::menuAgregarViaje();
+                TestViajes::menuModificarResponsable();
                 break;
             case 8:
-                TestViajes::menuModificarViaje();
+                TestViajes::menuEliminarResponsable();
                 break;
             case 9:
-                TestViajes::menuEliminarViaje();
+                TestViajes::mostrarViajes();
                 break;
             case 10:
-                TestViajes::menuAgregarPasajero();
+                TestViajes::menuAgregarViaje();
                 break;
             case 11:
-                TestViajes::menuModificarPasajero();
+                TestViajes::menuModificarViaje();
                 break;
             case 12:
+                TestViajes::menuEliminarViaje();
+                break;
+            case 13:
+                TestViajes::mostrarPasajeros();
+                break;
+            case 14:
+                TestViajes::menuAgregarPasajero();
+                break;
+            case 15:
+                TestViajes::menuModificarPasajero();
+                break;
+            case 16:
                 TestViajes::menuEliminarPasajero();
                 break;
             default:
                 "\n❌ La opción ingresada no es válida";
                 break;
+        }
+    }
+
+    public static function mostrarEmpresas(){
+        $empresa = new Empresa;
+        $empresas = $empresa->listar();
+
+        foreach ($empresas as $empresa) {
+            echo "\n$empresa";
         }
     }
 
@@ -140,6 +165,15 @@ class TestViajes
             echo "✅ Empresa eliminada";
         } else {
             echo "❌ Ha ocurrido un error";
+        }
+    }
+
+    public static function mostrarResponsables(){
+        $responsable = new ResponsableV;
+        $responsables = $responsable->listar();
+
+        foreach ($responsables as $responsable) {
+            echo "\n$responsable";
         }
     }
 
@@ -212,6 +246,16 @@ class TestViajes
             echo "✅ Responsable eliminado";
         } else {
             echo "❌ Ha ocurrido un error";
+        }
+    }
+
+    
+    public static function mostrarViajes(){
+        $viaje = new Viaje;
+        $viajes = $viaje->listar();
+
+        foreach ($viajes as $viaje) {
+            echo "\n$viaje";
         }
     }
 
@@ -304,42 +348,14 @@ class TestViajes
         }
     }
 
-    // - modificarPasajero()
-    public static function modificarPasajero(string $documento, string $nombre, string $apellido, int $telefono, int $idViaje)
-    {
+    public static function mostrarPasajeros(){
         $pasajero = new Pasajero;
-        $pasajero->buscar($documento);
-        $pasajero->setNombre($nombre);
-        $pasajero->setApellido($apellido);
-        $pasajero->setTelefono($telefono);
-        $pasajero->setIdViaje($idViaje);
-        return $pasajero->modificar();
-    }
+        $pasajeros = $pasajero->listar();
 
-
-
-    public static function menuModificarPasajero()
-    {
-        echo "\nModificar pasajero \n";
-        echo "Ingresa el documento : ";
-        $doc = trim(fgets(STDIN));
-        echo "Ingresa el nombre: ";
-        $nombre = trim(fgets(STDIN));
-        echo "Ingresa apellido: ";
-        $apellido = trim(fgets(STDIN));
-        echo "Ingresa el  telefono : ";
-        $telefono = trim(fgets(STDIN));
-        echo "Ingresa el  idViaje : ";
-        $idViaje = trim(fgets(STDIN));
-        $objPasajero = new Pasajero;
-        $objPasajero->buscar($doc);
-        if (TestViajes::modificarPasajero($doc, $nombre, $apellido, $telefono, $idViaje)) {
-            echo "✅ pasajero modificado";
-        } else {
-            echo "❌ Ha ocurrido un error";
+        foreach ($pasajeros as $pasajero) {
+            echo "\n$pasajero";
         }
     }
-
 
     public static function agregarPasajero(string $nombre, string $apellido, string $dni, int $telefono, int $idViaje)
     {
@@ -368,6 +384,38 @@ class TestViajes
         }
     }
 
+    public static function modificarPasajero(string $documento, string $nombre, string $apellido, int $telefono, int $idViaje)
+    {
+        $pasajero = new Pasajero;
+        $pasajero->buscar($documento);
+        $pasajero->setNombre($nombre);
+        $pasajero->setApellido($apellido);
+        $pasajero->setTelefono($telefono);
+        $pasajero->setIdViaje($idViaje);
+        return $pasajero->modificar();
+    }
+
+    public static function menuModificarPasajero()
+    {
+        echo "\nModificar pasajero \n";
+        echo "Ingresa el documento : ";
+        $doc = trim(fgets(STDIN));
+        echo "Ingresa el nombre: ";
+        $nombre = trim(fgets(STDIN));
+        echo "Ingresa apellido: ";
+        $apellido = trim(fgets(STDIN));
+        echo "Ingresa el  telefono : ";
+        $telefono = trim(fgets(STDIN));
+        echo "Ingresa el  idViaje : ";
+        $idViaje = trim(fgets(STDIN));
+        $objPasajero = new Pasajero;
+        $objPasajero->buscar($doc);
+        if (TestViajes::modificarPasajero($doc, $nombre, $apellido, $telefono, $idViaje)) {
+            echo "✅ pasajero modificado";
+        } else {
+            echo "❌ Ha ocurrido un error";
+        }
+    }
 
     public static function eliminarPasajero($doc)
     {

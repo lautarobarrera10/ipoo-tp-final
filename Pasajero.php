@@ -126,7 +126,7 @@ class Pasajero extends Persona
         if ($condicion != ""){
             $consulta .= "WHERE $condicion ";
         }
-        $consulta .= "ORDER BY pdocumento";
+        $consulta .= "ORDER BY apellido";
 
         if ($database->iniciar()){
             if ($database->ejecutar($consulta)){
