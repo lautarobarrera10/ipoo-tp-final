@@ -131,31 +131,45 @@ class Viaje
 // Implementar método listar en orm de viaje  //
     public function listar($condicion = "")
     {
-        $arrViaje = null;
+        $arrayViaje = null;
         $database = new Database;
-        $consulta = "SELECT * FROM viaje ";
+        $consulta = "SELECT * FROM viaje INNER JOIN empresa ON empresa.idempresa = viaje.idempresa INNER JOIN responsable ON responsable.rnumeroempleado = viaje.rnumeroempleado INNER JOIN persona ON persona.documento = responsable.rdocumento ";
         if ($condicion != "") {
             $consulta .= "WHERE $condicion ";
         }
-        $consulta .= "ORDER BY codigo";
+        $consulta .= "ORDER BY idviaje";
 
         if ($database->iniciar()) {
 
             if ($database->ejecutar($consulta)) {
-                $arrViaje = [];
+                $arrayViaje = [];
                 while ($viajeEncontrado = $database->registro()) {
+                    $responsable = new ResponsableV;
+                    $responsable->cargar(
+                        $viajeEncontrado["nombre"],
+                        $viajeEncontrado["apellido"],
+                        $viajeEncontrado["rdocumento"],
+                        $viajeEncontrado["rnumerolicencia"]
+                    );
+                    $responsable->setNumeroDeEmpleado($viajeEncontrado["rnumeroempleado"]);
+                    $empresa = new Empresa;
+                    $empresa->cargar(
+                        $viajeEncontrado["enombre"],
+                        $viajeEncontrado["edireccion"]
+                    );
+                    $empresa->setId($viajeEncontrado["idempresa"]);
                     $viaje = new self;
                     $viaje->cargar(
-                        $viajeEncontrado["destino"],
-                        $viajeEncontrado["cantidadMaximaDePasajeros"],
-                        $viajeEncontrado["colObjPasajeros"],
-                        $viajeEncontrado["objResponsableV"],
-                        $viajeEncontrado["costoDelViaje"],
-                        $viajeEncontrado["objEmpresa"]
+                        $viajeEncontrado["vdestino"],
+                        $viajeEncontrado["vcantmaxpasajeros"],
+                        [],
+                        $responsable,
+                        $viajeEncontrado["vimporte"],
+                        $empresa
 
                     );
-                    $viaje->setCodigo($viajeEncontrado["codigo"]);
-                    array_push($arrViaje, $viaje);
+                    $viaje->setCodigo($viajeEncontrado["idviaje"]);
+                    array_push($arrayViaje, $viaje);
                 }
             } else {
                 $this->setMensajeoperacion($database->getError());
@@ -164,7 +178,7 @@ class Viaje
             $this->setMensajeoperacion($database->getError());
         }
 
-        return $arrViaje;
+        return $arrayViaje;
     }
 
 

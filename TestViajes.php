@@ -391,9 +391,9 @@ class TestViajes
 
 // TestViajes::showMenu();
 
-$empresa = new Empresa;
-$empresas = $empresa->listar();
+$viaje = new Viaje;
+$viajes = $viaje->listar();
 
-foreach ($empresas as $empresa) {
-    echo "\n$empresa";
+foreach ($viajes as $viaje) {
+    echo "\n$viaje";
 }
