@@ -94,16 +94,18 @@ class ResponsableV extends Persona
     public function eliminar()
     {
         $database = new Database;
-        $consulta = "DELETE FROM responsable WHERE rnumeroempleado = " . $this->getNumeroDeEmpleado();
         $rta = false;
-        if ($database->iniciar()) {
-            if ($database->ejecutar($consulta)) {
-                $rta = true;
+        if (parent::eliminar()){
+            $consulta = "DELETE FROM responsable WHERE rnumeroempleado = " . $this->getNumeroDeEmpleado();
+            if ($database->iniciar()) {
+                if ($database->ejecutar($consulta)) {
+                    $rta = true;
+                } else {
+                    $this->setMensajeoperacion($database->getError());
+                }
             } else {
                 $this->setMensajeoperacion($database->getError());
             }
-        } else {
-            $this->setMensajeoperacion($database->getError());
         }
         return $rta;
     }
