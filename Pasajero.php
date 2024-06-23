@@ -56,15 +56,18 @@ class Pasajero extends Persona
 
     public function buscar($documento){
         $database = new Database;
-        $consulta = "SELECT * FROM pasajero WHERE pdocumento='" . $documento . "'";
+        $consulta = "SELECT * FROM pasajero INNER JOIN persona ON pasajero.pdocumento = persona.documento WHERE pdocumento='" . $documento . "'";
         $rta = false;
         if ($database->iniciar()) {
             if ($database->ejecutar($consulta)) {
                 if ($pasajero = $database->registro()) {
-                    parent::buscar($pasajero['pdocumento']);
-                    $this->setTelefono($pasajero['ptelefono']);
-                    $this->setIdViaje($pasajero['idviaje']);
-                    $rta = true;
+                    $this->cargar(
+                        $pasajero["nombre"], 
+                        $pasajero["apellido"], 
+                        $pasajero["documento"], 
+                        $pasajero["ptelefono"], 
+                        $pasajero["idviaje"]
+                    );
                 }
             } else {
                 $this->setMensajeoperacion($database->getError());
@@ -123,9 +126,11 @@ class Pasajero extends Persona
         $arregloPasajero = null;
         $database = new Database;
         $consulta = "SELECT * FROM pasajero INNER JOIN persona ON persona.documento = pasajero.pdocumento ";
+
         if ($condicion != ""){
             $consulta .= "WHERE $condicion ";
         }
+
         $consulta .= "ORDER BY apellido";
 
         if ($database->iniciar()){

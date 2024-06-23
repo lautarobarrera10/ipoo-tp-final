@@ -48,14 +48,20 @@ class ResponsableV extends Persona
     public function buscar($numeroEmpleado)
     {
         $database = new Database;
-        $consulta = "SELECT * FROM responsable WHERE rnumeroempleado=" . $numeroEmpleado;
+        $consulta = "SELECT * FROM responsable INNER JOIN persona ON responsable.rdocumento = persona.documento WHERE rnumeroempleado=" . $numeroEmpleado;
         $rta = false;
         if ($database->iniciar()) {
             if ($database->ejecutar($consulta)) {
                 if ($empleado = $database->registro()) {
-                    parent::buscar($empleado['rdocumento']);
-                    $this->setNumeroDeEmpleado($empleado['rnumeroempleado']);
-                    $this->setNumeroDeLicencia($empleado['rnumerolicencia']);
+                    $this->cargar(
+                        $empleado["nombre"], 
+                        $empleado["apellido"], 
+                        $empleado["documento"], 
+                        $empleado["rnumerolicencia"]
+                    );
+
+                    // Como la función cargar no recibe el número de empleado como parametro, lo seteamos aparte
+                    $this->setNumeroDeEmpleado($empleado["rnumeroempleado"]);
                     $rta = true;
                 }
             } else {
