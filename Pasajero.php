@@ -18,7 +18,7 @@ class Pasajero extends Persona
         $this->idViaje = 0;
     }
 
-// este metodo carga los datos del pasajero en la base de datos
+    // este metodo carga los datos del pasajero en la base de datos
     public function cargar($nombre, $apellido, $documento, $telefono = 0, $idViaje = 0)
     {
         // llama a los metodos de la clase padre
@@ -31,15 +31,17 @@ class Pasajero extends Persona
 
     public function insertar()
     {
+        // se crea una instancia de la clase Database
         $database = new Database;
         $resp = false;
-        if (parent::insertar()){
+        // se llama al metodo insertar de la clase padre y si se inserta correctamente se inserta en la tabla pasajero
+        if (parent::insertar()) {
             $consulta = "INSERT INTO pasajero(pdocumento, ptelefono, idviaje) VALUES (
-            '". $this->getDocumento() ."',
-            ". $this->getTelefono() .",
-            ". $this->getIdViaje() ."
+            '" . $this->getDocumento() . "',
+            " . $this->getTelefono() . ",
+            " . $this->getIdViaje() . "
             )";
-
+            // se inicia la base de datos y se ejecuta la consulta
             if ($database->iniciar()) {
                 if ($database->ejecutar($consulta)) {
                     $resp =  true;
@@ -54,7 +56,8 @@ class Pasajero extends Persona
         return $resp;
     }
 
-    public function buscar($documento){
+    public function buscar($documento)
+    {
         $database = new Database;
         $consulta = "SELECT * FROM pasajero INNER JOIN persona ON pasajero.pdocumento = persona.documento WHERE pdocumento='" . $documento . "'";
         $rta = false;
@@ -82,11 +85,11 @@ class Pasajero extends Persona
     {
         $database = new Database;
         $rta = false;
-        if (parent::modificar()){
+        if (parent::modificar()) {
             $consulta = "UPDATE pasajero SET 
             ptelefono = " . $this->getTelefono() . ",
             idviaje = " . $this->getIdViaje() .
-            " WHERE pdocumento = ". $this->getDocumento();
+                " WHERE pdocumento = " . $this->getDocumento();
 
             if ($database->iniciar()) {
                 if ($database->ejecutar($consulta)) {
@@ -98,7 +101,7 @@ class Pasajero extends Persona
                 $this->setMensajeoperacion($database->getError());
             }
         }
-        
+
         return $rta;
     }
 
@@ -106,7 +109,7 @@ class Pasajero extends Persona
     {
         $database = new Database;
         $rta = false;
-        if (parent::eliminar()){
+        if (parent::eliminar()) {
             $consulta = "DELETE FROM pasajero WHERE pdocumento = '" . $this->getDocumento() . "'";
             if ($database->iniciar()) {
                 if ($database->ejecutar($consulta)) {
@@ -118,25 +121,26 @@ class Pasajero extends Persona
                 $this->setMensajeoperacion($database->getError());
             }
         }
-        
+
         return $rta;
     }
 
-    public function listar($condicion = ""){
+    public function listar($condicion = "")
+    {
         $arregloPasajero = null;
         $database = new Database;
         $consulta = "SELECT * FROM pasajero INNER JOIN persona ON persona.documento = pasajero.pdocumento ";
-
-        if ($condicion != ""){
+        if ($condicion != "") {
             $consulta .= "WHERE $condicion ";
         }
 
         $consulta .= "ORDER BY apellido";
 
-        if ($database->iniciar()){
-            if ($database->ejecutar($consulta)){
+        if ($database->iniciar()) {
+            if ($database->ejecutar($consulta)) {
                 $arregloPasajero = [];
-                while ($pasajeroEncontrado = $database->registro()){
+                
+                while ($pasajeroEncontrado = $database->registro()) {
                     $pasajero = new self;
                     $pasajero->cargar(
                         $pasajeroEncontrado["nombre"],
