@@ -21,21 +21,25 @@ class TestViajes
         echo "\n Bienvenido al administrador de viajes \n " .
             " ¿Qué quieres hacer hoy? \n " .
             "   1) Ver empresas \n " .
-            "   2) Agregar empresa \n " .
-            "   3) Modificar empresa \n " .
-            "   4) Eliminar empresa \n " .
-            "   5) Ver responsables \n " .
-            "   6) Agregar responsable \n " .
-            "   7) Modificar responsable \n " .
-            "   8) Eliminar responsable \n " .
-            "   9) Ver viajes \n " .
-            "   10) Agregar viaje \n " .
-            "   11) Modificar viaje \n " .
-            "   12) Eliminar viaje \n " .
-            "   13) Ver pasajeros \n " .
-            "   14) Agregar pasajero \n " .
-            "   15) Modificar pasajero \n " .
-            "   16) Eliminar pasajero \n";
+            "   2) Buscar empresa \n " .
+            "   3) Agregar empresa \n " .
+            "   4) Modificar empresa \n " .
+            "   5) Eliminar empresa \n " .
+            "   6) Ver responsables \n " .
+            "   7) Buscar responsable \n " .
+            "   8) Agregar responsable \n " .
+            "   9) Modificar responsable \n " .
+            "   10) Eliminar responsable \n " .
+            "   11) Ver viajes \n " .
+            "   12) Buscar viaje \n " .
+            "   13) Agregar viaje \n " .
+            "   14) Modificar viaje \n " .
+            "   15) Eliminar viaje \n " .
+            "   16) Ver pasajeros \n " .
+            "   17) Buscar pasajero \n " .
+            "   18) Agregar pasajero \n " .
+            "   19) Modificar pasajero \n " .
+            "   20) Eliminar pasajero \n";
 
         echo "Opción ingresada: ";
         $opcion = trim(fgets(STDIN));
@@ -44,48 +48,60 @@ class TestViajes
                 TestViajes::mostrarEmpresas();
                 break;
             case 2:
-                TestViajes::menuAgregarEmpresa();
+                TestViajes::menuBuscarEmpresa();
                 break;
             case 3:
-                TestViajes::menuModificarEmpresa();
+                TestViajes::menuAgregarEmpresa();
                 break;
             case 4:
-                TestViajes::menuEliminarEmpresa();
+                TestViajes::menuModificarEmpresa();
                 break;
             case 5:
-                TestViajes::mostrarResponsables();
+                TestViajes::menuEliminarEmpresa();
                 break;
             case 6:
-                TestViajes::menuAgregarResponsable();
+                TestViajes::mostrarResponsables();
                 break;
             case 7:
-                TestViajes::menuModificarResponsable();
+                // Buscar responsable
                 break;
             case 8:
-                TestViajes::menuEliminarResponsable();
+                TestViajes::menuAgregarResponsable();
                 break;
             case 9:
-                TestViajes::mostrarViajes();
+                TestViajes::menuModificarResponsable();
                 break;
             case 10:
-                TestViajes::menuAgregarViaje();
+                TestViajes::menuEliminarResponsable();
                 break;
             case 11:
-                TestViajes::menuModificarViaje();
+                TestViajes::mostrarViajes();
                 break;
             case 12:
-                TestViajes::menuEliminarViaje();
+                // Buscar viaje
                 break;
             case 13:
-                TestViajes::mostrarPasajeros();
+                TestViajes::menuAgregarViaje();
                 break;
             case 14:
-                TestViajes::menuAgregarPasajero();
+                TestViajes::menuModificarViaje();
                 break;
             case 15:
-                TestViajes::menuModificarPasajero();
+                TestViajes::menuEliminarViaje();
                 break;
             case 16:
+                TestViajes::mostrarPasajeros();
+                break;
+            case 17:
+                // Buscar pasajero
+                break;
+            case 18:
+                TestViajes::menuAgregarPasajero();
+                break;
+            case 19:
+                TestViajes::menuModificarPasajero();
+                break;
+            case 20:
                 TestViajes::menuEliminarPasajero();
                 break;
             default:
@@ -100,6 +116,28 @@ class TestViajes
 
         foreach ($empresas as $empresa) {
             echo "\n$empresa";
+        }
+    }
+
+    public static function buscarEmpresa($id)
+    {
+        $rta = null;
+        $empresa = new Empresa;
+        if($empresa->buscar($id)){
+            $rta = $empresa;
+        }
+        return $rta;
+    }
+
+    public static function menuBuscarEmpresa()
+    {
+        echo "\nBuscar empresa \n";
+        echo "Ingresa el id de la empresa: ";
+        $id = trim(fgets(STDIN));
+        if ($empresa = TestViajes::buscarEmpresa($id)) {
+            echo $empresa;
+        } else {
+            echo "❌ Empresa no encontrada";
         }
     }
 
