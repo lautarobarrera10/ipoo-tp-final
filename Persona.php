@@ -98,9 +98,11 @@ class Persona
         if ($database->iniciar()) {
             if ($database->ejecutar($consulta)) {
                 if ($persona = $database->registro()) {
-                    $this->setDocumento($persona['documento']);
-                    $this->setNombre($persona['nombre']);
-                    $this->setApellido($persona['apellido']);
+                    $this->cargar(
+                        $persona['nombre'],
+                        $persona['apellido'],
+                        $persona['documento']
+                    );
                     $rta = true;
                 }
             } else {
