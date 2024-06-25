@@ -103,7 +103,7 @@ class Database {
      * Devuelve un registro retornado por la ejecucion de una consulta
      * el puntero se despleza al siguiente registro de la consulta
      *
-     * @return boolean
+     * 
      */
     public function registro() {
         $resp = null;
