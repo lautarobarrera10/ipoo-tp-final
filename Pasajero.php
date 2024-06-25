@@ -109,17 +109,17 @@ class Pasajero extends Persona
     {
         $database = new Database;
         $rta = false;
-        if (parent::eliminar()) {
-            $consulta = "DELETE FROM pasajero WHERE pdocumento = '" . $this->getDocumento() . "'";
-            if ($database->iniciar()) {
-                if ($database->ejecutar($consulta)) {
-                    $rta = true;
-                } else {
-                    $this->setMensajeoperacion($database->getError());
-                }
+
+        $consulta = "DELETE FROM pasajero WHERE pdocumento = '" . $this->getDocumento() . "'";
+        if ($database->iniciar()) {
+            if ($database->ejecutar($consulta)) {
+                $rta = true;
+                parent::eliminar();
             } else {
                 $this->setMensajeoperacion($database->getError());
             }
+        } else {
+            $this->setMensajeoperacion($database->getError());
         }
 
         return $rta;

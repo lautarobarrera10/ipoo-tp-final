@@ -102,18 +102,21 @@ class ResponsableV extends Persona
     {
         $database = new Database;
         $rta = false;
-        if (parent::eliminar()){
-            $consulta = "DELETE FROM responsable WHERE rnumeroempleado = " . $this->getNumeroDeEmpleado();
-            if ($database->iniciar()) {
-                if ($database->ejecutar($consulta)) {
-                    $rta = true;
-                } else {
-                    $this->setMensajeoperacion($database->getError());
-                }
+
+        // Eliminamos el responsable
+        $consulta = "DELETE FROM responsable WHERE rnumeroempleado = " . $this->getNumeroDeEmpleado();
+        if ($database->iniciar()) {
+            if ($database->ejecutar($consulta)) {
+                // Si pudimos borrar el responsable, borramos la persona
+                parent::eliminar();
+                $rta = true;
             } else {
                 $this->setMensajeoperacion($database->getError());
             }
+        } else {
+            $this->setMensajeoperacion($database->getError());
         }
+
         return $rta;
     }
 

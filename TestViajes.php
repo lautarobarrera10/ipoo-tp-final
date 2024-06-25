@@ -437,10 +437,10 @@ class TestViajes
     }
 }
 
-// TestViajes::showMenu();
+TestViajes::showMenu();
 
-$responsable = new ResponsableV;
-$responsable->buscar(2);
+// $responsable = new ResponsableV;
+// $responsable->buscar(2);
 
-echo $responsable;
+// echo $responsable;
 
