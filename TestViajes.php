@@ -63,7 +63,7 @@ class TestViajes
                 TestViajes::mostrarResponsables();
                 break;
             case 7:
-                // Buscar responsable
+                TestViajes::menuBuscarResponsable();
                 break;
             case 8:
                 TestViajes::menuAgregarResponsable();
@@ -212,6 +212,28 @@ class TestViajes
 
         foreach ($responsables as $responsable) {
             echo "\n$responsable";
+        }
+    }
+
+    public static function buscarResponsable($numeroEmpleado)
+    {
+        $rta = null;
+        $responsable = new ResponsableV;
+        if($responsable->buscar($numeroEmpleado)){
+            $rta = $responsable;
+        }
+        return $rta;
+    }
+
+    public static function menuBuscarResponsable()
+    {
+        echo "\nBuscar responsable \n";
+        echo "Ingresa el número de empleado del responsable: ";
+        $numeroEmpleado = trim(fgets(STDIN));
+        if ($responsable = TestViajes::buscarResponsable($numeroEmpleado)) {
+            echo $responsable;
+        } else {
+            echo "❌ Responsable no encontrado";
         }
     }
 
