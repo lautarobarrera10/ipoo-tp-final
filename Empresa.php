@@ -83,9 +83,8 @@ class Empresa {
         if ($database->iniciar()){
             if ($database->ejecutar($consulta)){
                 if ($empresa = $database->registro()){
+                    $this->cargar($empresa['enombre'], $empresa['edireccion']);
                     $this->setId($empresa['idempresa']);
-                    $this->setNombre($empresa['enombre']);
-                    $this->setDireccion($empresa['edireccion']);
                     $rta = true;
                 }
             } else {
