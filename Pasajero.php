@@ -18,7 +18,7 @@ class Pasajero extends Persona
         $this->idViaje = 0;
     }
 
-    // este metodo carga los datos del pasajero en la base de datos
+    // este metodo carga los datos del pasajero 
     public function cargar($nombre, $apellido, $documento, $telefono = 0, $idViaje = 0)
     {
         // llama a los metodos de la clase padre
@@ -31,7 +31,6 @@ class Pasajero extends Persona
 
     public function insertar()
     {
-        // se crea una instancia de la clase Database
         $database = new Database;
         $resp = false;
         // se llama al metodo insertar de la clase padre y si se inserta correctamente se inserta en la tabla pasajero
@@ -41,7 +40,6 @@ class Pasajero extends Persona
             " . $this->getTelefono() . ",
             " . $this->getIdViaje() . "
             )";
-            // se inicia la base de datos y se ejecuta la consulta
             if ($database->iniciar()) {
                 if ($database->ejecutar($consulta)) {
                     $resp =  true;
