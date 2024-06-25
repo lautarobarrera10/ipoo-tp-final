@@ -64,16 +64,21 @@ class Viaje
         if ($database->iniciar()) {
             if ($database->ejecutar($consulta)) {
                 if ($viaje = $database->registro()) {
-                    $this->setCodigo($viaje['idviaje']);
-                    $this->setDestino($viaje['vdestino']);
-                    $this->setCantidadMaximaDePasajeros($viaje['vcantmaxpasajeros']);
                     $empresa = new Empresa;
                     $empresa->buscar($viaje['idempresa']);
-                    $this->setObjEmpresa($empresa);
                     $empleado = new ResponsableV;
                     $empleado->buscar($viaje['rnumeroempleado']);
-                    $this->setObjResponsableV($empleado);
-                    $this->setCostoDelViaje($viaje['vimporte']);
+                    $this->cargar(
+                        $viaje['vdestino'],
+                        $viaje['vcantmaxpasajeros'],
+                        [],
+                        $empleado,
+                        $viaje['vimporte'],
+                        $empresa
+                    );
+
+                    $this->setCodigo($viaje['idviaje']);
+
                     $rta = true;
                 }
             } else {
