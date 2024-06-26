@@ -78,7 +78,7 @@ class TestViajes
                 TestViajes::mostrarViajes();
                 break;
             case 12:
-                // Buscar viaje
+                TestViajes::menuBuscarViaje();
                 break;
             case 13:
                 TestViajes::menuAgregarViaje();
@@ -316,6 +316,28 @@ class TestViajes
 
         foreach ($viajes as $viaje) {
             echo "\n$viaje";
+        }
+    }
+
+    public static function buscarViaje($id)
+    {
+        $rta = null;
+        $viaje = new Viaje;
+        if($viaje->buscar($id)){
+            $rta = $viaje;
+        }
+        return $rta;
+    }
+
+    public static function menuBuscarViaje()
+    {
+        echo "\nBuscar viaje \n";
+        echo "Ingresa el id del viaje: ";
+        $id = trim(fgets(STDIN));
+        if ($viaje = TestViajes::buscarViaje($id)) {
+            echo $viaje;
+        } else {
+            echo "❌ Viaje no encontrado";
         }
     }
 
