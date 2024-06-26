@@ -502,15 +502,15 @@ class TestViajes
     public static function menuModificarPasajero()
     {
         echo "\nModificar pasajero \n";
-        echo "Ingresa el documento : ";
+        echo "Ingresa el documento: ";
         $doc = trim(fgets(STDIN));
         echo "Ingresa el nombre: ";
         $nombre = trim(fgets(STDIN));
         echo "Ingresa apellido: ";
         $apellido = trim(fgets(STDIN));
-        echo "Ingresa el  telefono : ";
+        echo "Ingresa el  telefono: ";
         $telefono = trim(fgets(STDIN));
-        echo "Ingresa el  idViaje : ";
+        echo "Ingresa el  idViaje: ";
         $idViaje = trim(fgets(STDIN));
         $objPasajero = new Pasajero;
         $objPasajero->buscar($doc);
