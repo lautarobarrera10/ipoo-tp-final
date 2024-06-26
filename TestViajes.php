@@ -109,6 +109,11 @@ class TestViajes
                 break;
         }
     }
+    //funcion para validar que sea numerico
+    function es_numerico($cadena) {
+        //retorna true si es numerico y false si es string
+        return ctype_digit($cadena);
+    }
 
     public static function mostrarEmpresas(){
         $empresa = new Empresa;
@@ -123,20 +128,21 @@ class TestViajes
     {
         $rta = null;
         $empresa = new Empresa;
-        if ($id > 0){
+        if ($id > 0 && TestViajes::es_numerico($id)){
             if ($empresa->buscar($id)) {
                 $rta = $empresa;
             }else{
                 echo "❌ la empresa no existe";
             }
         }else{
-            echo "❌ tiene que ser un id mayor a cero";
+            echo "❌ tiene que ser un numero mayor a cero";
         }
         return $rta;
     }
 
     public static function menuBuscarEmpresa()
     {
+        TestViajes::mostrarEmpresas();
         echo "\nBuscar empresa \n";
         echo "Ingresa el id de la empresa: ";
         $id = trim(fgets(STDIN));
@@ -172,7 +178,7 @@ class TestViajes
     {
         $empresa = new Empresa;
         $respuesta = false;
-        if ($id > 0) {
+        if ($id > 0 && TestViajes::es_numerico($id)) {
             if ($empresa->buscar($id)) {
                 if ($nombre !== "") {
                     $empresa->setNombre($nombre);
@@ -185,7 +191,7 @@ class TestViajes
                 echo "❌ la empresa no existe";
             }
         }else{
-            echo "❌ tiene que ser un id mayor a cero";
+            echo "❌ tiene que ser un numero mayor a cero";
         }
         return $respuesta;
     }
@@ -249,20 +255,21 @@ class TestViajes
     {
         $rta = null;
         $responsable = new ResponsableV;
-        if ($numeroEmpleado > 0){
+        if ($numeroEmpleado > 0 && TestViajes::es_numerico($numeroEmpleado)){
             if ($responsable->buscar($numeroEmpleado)) {
                 $rta = $responsable;
             }else{
                 echo "❌ el responsable no existe";
             }
         }else{
-            echo "❌ tiene que ser un id mayor a cero";
+            echo "❌ tiene que ser un numero mayor a cero";
         }
         return $rta;
     }
 
     public static function menuBuscarResponsable()
     {
+        TestViajes::mostrarResponsables();
         echo "\nBuscar responsable \n";
         echo "Ingresa el número de empleado del responsable: ";
         $numeroEmpleado = trim(fgets(STDIN));
@@ -359,20 +366,21 @@ class TestViajes
     {
         $rta = null;
         $viaje = new Viaje;
-        if ($id > 0){
+        if ($id > 0 && TestViajes::es_numerico($id)){
             if ($viaje->buscar($id)) {
                 $rta = $viaje;
             }else{
                 echo "❌ el viaje no existe";
             }
         }else{
-            echo "❌ tiene que ser un id mayor a cero";
+            echo "❌ tiene que ser un numero mayor a cero";
         }
         return $rta;
     }
 
     public static function menuBuscarViaje()
     {
+        TestViajes::mostrarViajes();
         echo "\nBuscar viaje \n";
         echo "Ingresa el id del viaje: ";
         $id = trim(fgets(STDIN));
@@ -499,6 +507,7 @@ class TestViajes
 
     public static function menuBuscarPasajero()
     {
+        TestViajes::mostrarPasajeros();
         echo "\nBuscar pasajero \n";
         echo "Ingresa el documento del pasajero: ";
         $documento = trim(fgets(STDIN));
