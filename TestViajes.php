@@ -93,7 +93,7 @@ class TestViajes
                 TestViajes::mostrarPasajeros();
                 break;
             case 17:
-                // Buscar pasajero
+                TestViajes::menuBuscarPasajero();
                 break;
             case 18:
                 TestViajes::menuAgregarPasajero();
@@ -439,6 +439,28 @@ class TestViajes
         }
     }
 
+    public static function buscarPasajero($documento)
+    {
+        $rta = null;
+        $pasajero = new Pasajero;
+        if($pasajero->buscar($documento)){
+            $rta = $pasajero;
+        }
+        return $rta;
+    }
+
+    public static function menuBuscarPasajero()
+    {
+        echo "\nBuscar pasajero \n";
+        echo "Ingresa el documento del pasajero: ";
+        $documento = trim(fgets(STDIN));
+        if ($pasajero = TestViajes::buscarPasajero($documento)) {
+            echo $pasajero;
+        } else {
+            echo "❌ Pasajero no encontrado";
+        }
+    }
+
     public static function agregarPasajero(string $nombre, string $apellido, string $dni, int $telefono, int $idViaje)
     {
         $pasajero = new Pasajero;
@@ -520,9 +542,3 @@ class TestViajes
 }
 
 TestViajes::showMenu();
-
-// $responsable = new ResponsableV;
-// $responsable->buscar(2);
-
-// echo $responsable;
-

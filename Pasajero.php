@@ -69,6 +69,7 @@ class Pasajero extends Persona
                         $pasajero["ptelefono"], 
                         $pasajero["idviaje"]
                     );
+                    $rta = true;
                 }
             } else {
                 $this->setMensajeoperacion($database->getError());
