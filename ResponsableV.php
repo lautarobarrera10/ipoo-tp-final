@@ -133,7 +133,7 @@ class ResponsableV extends Persona
             if ($database->ejecutar($consulta)){
                 $arregloResponsables = [];
                 while ($responsableEncontrado = $database->registro()){
-                    $responsable = new self;
+                    $responsable = new ResponsableV;
                     $responsable->cargar(
                         $responsableEncontrado["nombre"],
                         $responsableEncontrado["apellido"],

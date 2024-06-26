@@ -141,7 +141,7 @@ class Empresa {
             if ($database->ejecutar($consulta)){
                 $arregloEmpresa = [];
                 while ($empresaEncontrada = $database->registro()){
-                    $empresa = new self;
+                    $empresa = new Empresa;
                     $empresa->cargar(
                         $empresaEncontrada["enombre"],
                         $empresaEncontrada["edireccion"]

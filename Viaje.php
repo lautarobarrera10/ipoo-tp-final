@@ -163,7 +163,7 @@ class Viaje
                         $viajeEncontrado["edireccion"]
                     );
                     $empresa->setId($viajeEncontrado["idempresa"]);
-                    $viaje = new self;
+                    $viaje = new Viaje;
                     $viaje->cargar(
                         $viajeEncontrado["vdestino"],
                         $viajeEncontrado["vcantmaxpasajeros"],

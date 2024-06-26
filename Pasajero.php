@@ -140,7 +140,7 @@ class Pasajero extends Persona
                 $arregloPasajero = [];
                 
                 while ($pasajeroEncontrado = $database->registro()) {
-                    $pasajero = new self;
+                    $pasajero = new Pasajero;
                     $pasajero->cargar(
                         $pasajeroEncontrado["nombre"],
                         $pasajeroEncontrado["apellido"],
