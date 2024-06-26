@@ -119,12 +119,18 @@ class TestViajes
         }
     }
 
-    public static function buscarEmpresa($id)
+    public static function buscarEmpresa(int $id)
     {
         $rta = null;
         $empresa = new Empresa;
-        if($empresa->buscar($id)){
-            $rta = $empresa;
+        if ($id > 0){
+            if ($empresa->buscar($id)) {
+                $rta = $empresa;
+            }else{
+                echo "❌ la empresa no existe";
+            }
+        }else{
+            echo "❌ tiene que ser un id mayor a cero";
         }
         return $rta;
     }
@@ -165,14 +171,28 @@ class TestViajes
     public static function modificarEmpresa(int $id, string $nombre, string $direccion)
     {
         $empresa = new Empresa;
-        $empresa->buscar($id);
-        $empresa->setNombre($nombre);
-        $empresa->setDireccion($direccion);
-        return $empresa->modificar();
+        $respuesta = false;
+        if ($id > 0) {
+            if ($empresa->buscar($id)) {
+                if ($nombre !== "") {
+                    $empresa->setNombre($nombre);
+                }
+                if ($direccion !== "") {
+                    $empresa->setDireccion($direccion);
+                }
+                $respuesta = $empresa->modificar();
+            }else{
+                echo "❌ la empresa no existe";
+            }
+        }else{
+            echo "❌ tiene que ser un id mayor a cero";
+        }
+        return $respuesta;
     }
 
     public static function menuModificarEmpresa()
     {
+        TestViajes::mostrarEmpresas();
         echo "\nModificar empresa \n";
         echo "Ingresa el id de la empresa: ";
         $id = trim(fgets(STDIN));
@@ -190,12 +210,22 @@ class TestViajes
     public static function eliminarEmpresa(int $id)
     {
         $empresa = new Empresa;
-        $empresa->buscar($id);
-        return $empresa->eliminar();
+        $respuesta = false ;
+        if ($id > 0){
+            if ($empresa->buscar($id)) {
+                $respuesta = $empresa->eliminar();
+            }else{
+                echo "❌ la empresa no existe";
+            }
+        }else{
+            echo "❌ tiene que ser un id mayor a cero";
+        }
+        return $respuesta;
     }
 
     public static function menuEliminarEmpresa()
     {
+        TestViajes::mostrarEmpresas();
         echo "\nEliminar empresa \n";
         echo "Ingresa el id de la empresa: ";
         $id = trim(fgets(STDIN));
@@ -215,12 +245,18 @@ class TestViajes
         }
     }
 
-    public static function buscarResponsable($numeroEmpleado)
+    public static function buscarResponsable(int $numeroEmpleado)
     {
         $rta = null;
         $responsable = new ResponsableV;
-        if($responsable->buscar($numeroEmpleado)){
-            $rta = $responsable;
+        if ($numeroEmpleado > 0){
+            if ($responsable->buscar($numeroEmpleado)) {
+                $rta = $responsable;
+            }else{
+                echo "❌ el responsable no existe";
+            }
+        }else{
+            echo "❌ tiene que ser un id mayor a cero";
         }
         return $rta;
     }
@@ -319,12 +355,18 @@ class TestViajes
         }
     }
 
-    public static function buscarViaje($id)
+    public static function buscarViaje(int $id)
     {
         $rta = null;
         $viaje = new Viaje;
-        if($viaje->buscar($id)){
-            $rta = $viaje;
+        if ($id > 0){
+            if ($viaje->buscar($id)) {
+                $rta = $viaje;
+            }else{
+                echo "❌ el viaje no existe";
+            }
+        }else{
+            echo "❌ tiene que ser un id mayor a cero";
         }
         return $rta;
     }
@@ -443,8 +485,14 @@ class TestViajes
     {
         $rta = null;
         $pasajero = new Pasajero;
-        if($pasajero->buscar($documento)){
-            $rta = $pasajero;
+        if ($documento !== ""){
+            if ($pasajero->buscar($documento)) {
+                $rta = $pasajero;
+            }else{
+                echo "❌ el pasajero no existe";
+            }
+        }else{
+            echo "❌ tiene que ser un id mayor a cero";
         }
         return $rta;
     }
