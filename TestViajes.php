@@ -110,9 +110,15 @@ class TestViajes
         }
     }
     //funcion para validar que sea numerico
-    function es_numerico($cadena) {
+    function es_numerico($valor) {
         //retorna true si es numerico y false si es string
-        return ctype_digit($cadena);
+        //solo sirve con enteros, los floats los toma como string por el . o ,
+ 
+        // Convertir el valor a cadena si no lo es
+        $cadena = strval($valor);
+        
+        // Utilizar preg_match para verificar si es numérico (sin incluir negativos)
+        return preg_match('/^\d+$/', $cadena);
     }
 
     public static function mostrarEmpresas(){
@@ -128,14 +134,12 @@ class TestViajes
     {
         $rta = null;
         $empresa = new Empresa;
-        if ($id > 0 && TestViajes::es_numerico($id)){
+        if (TestViajes::es_numerico($id)){
             if ($empresa->buscar($id)) {
                 $rta = $empresa;
-            }else{
-                echo "❌ la empresa no existe";
             }
         }else{
-            echo "❌ tiene que ser un numero mayor a cero";
+            echo "❌ el id de Empresa debe ser un numero mayor a cero";
         }
         return $rta;
     }
@@ -178,7 +182,7 @@ class TestViajes
     {
         $empresa = new Empresa;
         $respuesta = false;
-        if ($id > 0 && TestViajes::es_numerico($id)) {
+        if (TestViajes::es_numerico($id)) {
             if ($empresa->buscar($id)) {
                 if ($nombre !== "") {
                     $empresa->setNombre($nombre);
@@ -191,7 +195,7 @@ class TestViajes
                 echo "❌ la empresa no existe";
             }
         }else{
-            echo "❌ tiene que ser un numero mayor a cero";
+            echo "❌ el id de Empresa debe ser un numero mayor a cero";
         }
         return $respuesta;
     }
@@ -217,14 +221,14 @@ class TestViajes
     {
         $empresa = new Empresa;
         $respuesta = false ;
-        if ($id > 0){
+        if (TestViajes::es_numerico($id)){
             if ($empresa->buscar($id)) {
                 $respuesta = $empresa->eliminar();
             }else{
                 echo "❌ la empresa no existe";
             }
         }else{
-            echo "❌ tiene que ser un id mayor a cero";
+            echo "❌ el id de Empresa debe ser un numero mayor a cero";
         }
         return $respuesta;
     }
@@ -255,14 +259,12 @@ class TestViajes
     {
         $rta = null;
         $responsable = new ResponsableV;
-        if ($numeroEmpleado > 0 && TestViajes::es_numerico($numeroEmpleado)){
+        if (TestViajes::es_numerico($numeroEmpleado)){
             if ($responsable->buscar($numeroEmpleado)) {
                 $rta = $responsable;
-            }else{
-                echo "❌ el responsable no existe";
             }
         }else{
-            echo "❌ tiene que ser un numero mayor a cero";
+            echo "❌ el numero de empleado del Responsable debe ser mayor a cero";
         }
         return $rta;
     }
@@ -308,15 +310,31 @@ class TestViajes
     public static function modificarResponsable(int $numeroEmpleado, int $numeroLicencia, string $nombre, string $apellido)
     {
         $responsable = new ResponsableV;
-        $responsable->buscar($numeroEmpleado);
-        $responsable->setNumeroDeLicencia($numeroLicencia);
-        $responsable->setNombre($nombre);
-        $responsable->setApellido($apellido);
-        return $responsable->modificar();
+        $respuesta = false;
+        if (TestViajes::es_numerico($numeroEmpleado)) {
+            if ($responsable->buscar($numeroEmpleado)) {
+                if ($nombre !== "") {
+                    $responsable->setNombre($nombre);
+                }
+                if ($apellido !== "") {
+                    $responsable->setApellido($apellido);
+                }
+                if (TestViajes::es_numerico($numeroLicencia)) {
+                    $responsable->setNumeroDeLicencia($numeroLicencia);
+                }
+                $respuesta = $responsable->modificar();
+            }else{
+                echo "❌ el responsable no existe";
+            }
+        }else{
+            echo "❌ el numero de empleado del Responsable debe ser mayor a cero";
+        }
+        return $respuesta;
     }
 
     public static function menuModificarResponsable()
     {
+        TestViajes::mostrarResponsables();
         echo "\nModificar responsable \n";
         echo "Ingresa el número de empleado: ";
         $numeroEmpleado = trim(fgets(STDIN));
@@ -336,12 +354,22 @@ class TestViajes
     public static function eliminarResponsable(int $numeroEmpleado)
     {
         $responsable = new ResponsableV;
-        $responsable->buscar($numeroEmpleado);
-        return $responsable->eliminar();
+        $respuesta = false ;
+        if (TestViajes::es_numerico($numeroEmpleado)){
+            if ($responsable->buscar($numeroEmpleado)) {
+                $respuesta = $responsable->eliminar();
+            }else{
+                echo "❌ el responsable no existe";
+            }
+        }else{
+            echo "❌ el numero de empleado del Responsable debe ser mayor a cero";
+        }
+        return $respuesta;
     }
 
     public static function menuEliminarResponsable()
     {
+        TestViajes::mostrarResponsables();
         echo "\nEliminar responsable \n";
         echo "Ingresa el número de empleado: ";
         $numeroEmpleado = trim(fgets(STDIN));
@@ -366,14 +394,12 @@ class TestViajes
     {
         $rta = null;
         $viaje = new Viaje;
-        if ($id > 0 && TestViajes::es_numerico($id)){
+        if (TestViajes::es_numerico($id)){
             if ($viaje->buscar($id)) {
                 $rta = $viaje;
-            }else{
-                echo "❌ el viaje no existe";
             }
         }else{
-            echo "❌ tiene que ser un numero mayor a cero";
+            echo "❌ el id del Viaje debe ser un numero mayor a cero";
         }
         return $rta;
     }
@@ -391,11 +417,31 @@ class TestViajes
         }
     }
 
-    public static function agregarViaje(string $destino, int $cantidadMaximaDePasajeros, array $colObjPasajeros, ResponsableV $objResponsableV, float $costoViaje, Empresa $objEmpresa)
+    public static function agregarViaje(string $destino, int $cantidadMaximaDePasajeros, array $colObjPasajeros, int $nroResponsable, float $costoViaje, int $idEmpresa)
     {
         $viaje = new Viaje;
-        $viaje->cargar($destino, $cantidadMaximaDePasajeros, $colObjPasajeros, $objResponsableV, $costoViaje, $objEmpresa);
-        return $viaje->insertar();
+        $respuesta = false;
+        if (TestViajes::es_numerico($nroResponsable)){
+            $objResponsableV = new ResponsableV;
+            $objResponsableV->buscar($nroResponsable);
+            if (TestViajes::es_numerico($idEmpresa)) {
+                $objEmpresa = new Empresa;
+                $objEmpresa->buscar($idEmpresa);
+                if (!TestViajes::es_numerico($cantidadMaximaDePasajeros)) {
+                    $cantidadMaximaDePasajeros = 0;
+                }
+                if ($costoViaje < 0 ) {
+                    $costoViaje = 0;
+                }
+                $viaje->cargar($destino, $cantidadMaximaDePasajeros, $colObjPasajeros, $objResponsableV, $costoViaje, $objEmpresa);
+                $respuesta = $viaje->insertar();
+            }else{
+                echo "❌ el id de Empresa debe ser un numero mayor a cero";
+            }
+        }else{
+            echo "❌ el numero de empleado responsable del viaje tiene que ser mayor a cero";
+        }
+        return $respuesta;
     }
 
     public static function menuAgregarViaje()
@@ -406,37 +452,59 @@ class TestViajes
         echo "Ingresa la cantidad máxima de pasajeros: ";
         $cantidadMaxima = trim(fgets(STDIN));
         echo "Ingresa el número de empleado responsable: ";
-        $idResponsable = trim(fgets(STDIN));
-        $objResponsableV = new ResponsableV;
-        $objResponsableV->buscar($idResponsable);
+        $nroResponsable = trim(fgets(STDIN));
         echo "Ingresa el costo del viaje: ";
         $costo = trim(fgets(STDIN));
         echo "Ingresa el id de la empresa: ";
         $idEmpresa = trim(fgets(STDIN));
-        $objEmpresa = new Empresa;
-        $objEmpresa->buscar($idEmpresa);
-        if (TestViajes::agregarViaje($destino, $cantidadMaxima, [], $objResponsableV, $costo, $objEmpresa)) {
+        if (TestViajes::agregarViaje($destino, $cantidadMaxima, [], $nroResponsable, $costo, $idEmpresa)) {
             echo "✅ Viaje agregado";
         } else {
             echo "❌ Ha ocurrido un error";
         }
     }
 
-    public static function modificarViaje(int $idViaje, string $destino, int $cantidadMaximaDePasajeros, array $colObjPasajeros, ResponsableV $objResponsableV, float $costoViaje, Empresa $objEmpresa)
+    public static function modificarViaje(int $idViaje, string $destino, int $cantidadMaximaDePasajeros, array $colObjPasajeros, int $nroResponsable, float $costoViaje, int $idEmpresa)
     {
         $viaje = new Viaje;
-        $viaje->buscar($idViaje);
-        $viaje->setDestino($destino);
-        $viaje->setCantidadMaximaDePasajeros($cantidadMaximaDePasajeros);
-        $viaje->setColObjPasajeros($colObjPasajeros);
-        $viaje->setObjResponsableV($objResponsableV);
-        $viaje->setCostoDelViaje($costoViaje);
-        $viaje->setObjEmpresa($objEmpresa);
-        return $viaje->modificar();
+        $respuesta = false;
+        if (TestViajes::es_numerico($idViaje)) {
+            if ($viaje->buscar($idViaje)) {
+                $viaje->setColObjPasajeros($colObjPasajeros);
+                if ($destino !== "") {
+                    $viaje->setDestino($destino);
+                }
+                if ($costoViaje > 0) {
+                    $viaje->setCostoDelViaje($costoViaje);
+                }
+                if (TestViajes::es_numerico($cantidadMaximaDePasajeros)) {
+                    $viaje->setCantidadMaximaDePasajeros($cantidadMaximaDePasajeros);
+                }
+                if (TestViajes::es_numerico($nroResponsable)) {
+                    $objResponsableV = new ResponsableV;
+                    if ($objResponsableV->buscar($nroResponsable)) {
+                        $viaje->setObjResponsableV($objResponsableV);
+                    }
+                }
+                if (TestViajes::es_numerico($idEmpresa)) {
+                    $objEmpresa = new Empresa;
+                    if ($objEmpresa->buscar($nroResponsable)) {
+                        $viaje->setObjEmpresa($objEmpresa);
+                    }
+                }
+                $respuesta = $viaje->modificar();
+            }else{
+                echo "❌ el viaje no existe";
+            }
+        }else{
+            echo "❌ el id de Viaje tiene que ser un numero mayor a cero";
+        }
+        return $respuesta;
     }
 
     public static function menuModificarViaje()
     {
+        TestViajes::mostrarViajes();
         echo "\nModificar viaje \n";
         echo "Ingresa el id de viaje: ";
         $idViaje = trim(fgets(STDIN));
@@ -445,16 +513,12 @@ class TestViajes
         echo "Ingresa la cantidad máxima de pasajeros: ";
         $cantidadMaxima = trim(fgets(STDIN));
         echo "Ingresa el número de empleado responsable: ";
-        $idResponsable = trim(fgets(STDIN));
-        $objResponsableV = new ResponsableV;
-        $objResponsableV->buscar($idResponsable);
+        $nroResponsable = trim(fgets(STDIN));
         echo "Ingresa el costo del viaje: ";
         $costo = trim(fgets(STDIN));
         echo "Ingresa el id de la empresa: ";
         $idEmpresa = trim(fgets(STDIN));
-        $objEmpresa = new Empresa;
-        $objEmpresa->buscar($idEmpresa);
-        if (TestViajes::modificarViaje($idViaje, $destino, $cantidadMaxima, [], $objResponsableV, $costo, $objEmpresa)) {
+        if (TestViajes::modificarViaje($idViaje, $destino, $cantidadMaxima, [], $nroResponsable, $costo, $idEmpresa)) {
             echo "✅ Viaje modificado";
         } else {
             echo "❌ Ha ocurrido un error";
@@ -464,12 +528,22 @@ class TestViajes
     public static function eliminarViaje(int $idViaje)
     {
         $viaje = new Viaje;
-        $viaje->buscar($idViaje);
-        return $viaje->eliminar();
+        $respuesta = false ;
+        if (TestViajes::es_numerico($idViaje)){
+            if ($viaje->buscar($idViaje)) {
+                $respuesta = $viaje->eliminar();
+            }else{
+                echo "❌ el viaje no existe";
+            }
+        }else{
+            echo "❌ el id del viaje debe ser un numero mayor a cero";
+        }
+        return $respuesta;
     }
 
     public static function menuEliminarViaje()
     {
+        TestViajes::mostrarViajes();
         echo "\nEliminar viaje \n";
         echo "Ingresa el id de viaje: ";
         $idViaje = trim(fgets(STDIN));
@@ -493,14 +567,12 @@ class TestViajes
     {
         $rta = null;
         $pasajero = new Pasajero;
-        if ($documento !== ""){
+        if (TestViajes::es_numerico($documento)){
             if ($pasajero->buscar($documento)) {
                 $rta = $pasajero;
-            }else{
-                echo "❌ el pasajero no existe";
             }
         }else{
-            echo "❌ tiene que ser un id mayor a cero";
+            echo "❌ debe agregar el numero documento del Pasajero";
         }
         return $rta;
     }
@@ -518,11 +590,26 @@ class TestViajes
         }
     }
 
-    public static function agregarPasajero(string $nombre, string $apellido, string $dni, int $telefono, int $idViaje)
-    {
-        $pasajero = new Pasajero;
-        $pasajero->cargar($nombre, $apellido, $dni, $telefono, $idViaje);
-        return $pasajero->insertar();
+    public static function agregarPasajero(string $nombre, string $apellido, string $documento, int $telefono, int $idViaje)
+    {   
+        $respuesta = false;
+        $viaje = new Viaje;
+        if (TestViajes::es_numerico($idViaje)) {
+            if ($viaje->buscar($idViaje)) {
+                $pasajero = new Pasajero;
+                if (TestViajes::es_numerico($documento)){
+                    $pasajero->cargar($nombre, $apellido, $documento, $telefono, $idViaje);
+                    $respuesta = $pasajero->insertar();
+                }else{
+                    echo "❌ el documento del Pasajero NO se agrego de forma correcta";
+                }
+            }else{
+                echo "❌ Viaje no encontrado ";
+            }
+        }else{
+            echo "❌ el id del Viaje debe ser un numero mayor a cero ";
+        }
+        return $respuesta;
     }
 
     public static function menuAgregarPasajero()
@@ -548,16 +635,37 @@ class TestViajes
     public static function modificarPasajero(string $documento, string $nombre, string $apellido, int $telefono, int $idViaje)
     {
         $pasajero = new Pasajero;
-        $pasajero->buscar($documento);
-        $pasajero->setNombre($nombre);
-        $pasajero->setApellido($apellido);
-        $pasajero->setTelefono($telefono);
-        $pasajero->setIdViaje($idViaje);
-        return $pasajero->modificar();
+        $respuesta = false;
+        if (TestViajes::es_numerico($documento)) {
+            if ($pasajero->buscar($documento)) {
+                if ($nombre !== "") {
+                    $pasajero->setNombre($nombre);
+                }
+                if ($apellido !== "") {
+                    $pasajero->setApellido($apellido);
+                }
+                if ($telefono !== "") {
+                    $pasajero->setTelefono($telefono);
+                }
+                $viaje = new Viaje;
+                if (TestViajes::es_numerico($idViaje)){
+                    if ($viaje->buscar($idViaje)) {
+                        $pasajero->setIdViaje($idViaje);
+                    }
+                }
+                $respuesta = $pasajero->modificar();
+            }else{
+                echo "❌ el pasajero no existe";
+            }
+        }else{
+            echo "❌ el documento del Pasajero NO se agrego de forma correcta";
+        }
+        return $respuesta;
     }
 
     public static function menuModificarPasajero()
     {
+        TestViajes::mostrarPasajeros();
         echo "\nModificar pasajero \n";
         echo "Ingresa el documento: ";
         $doc = trim(fgets(STDIN));
@@ -569,8 +677,6 @@ class TestViajes
         $telefono = trim(fgets(STDIN));
         echo "Ingresa el  idViaje: ";
         $idViaje = trim(fgets(STDIN));
-        $objPasajero = new Pasajero;
-        $objPasajero->buscar($doc);
         if (TestViajes::modificarPasajero($doc, $nombre, $apellido, $telefono, $idViaje)) {
             echo "✅ pasajero modificado";
         } else {
@@ -581,12 +687,22 @@ class TestViajes
     public static function eliminarPasajero($doc)
     {
         $pasajero = new Pasajero;
-        $pasajero->buscar($doc);
-        return $pasajero->eliminar();
+        $respuesta = false ;
+        if (TestViajes::es_numerico($doc)){
+            if ($pasajero->buscar($doc)) {
+                $respuesta = $pasajero->eliminar();
+            }else{
+                echo "❌ el pasajero no existe";
+            }
+        }else{
+            echo "❌ el documento del Pasajero NO se agrego de forma correcta";
+        }
+        return $respuesta;
     }
 
     public static function menuEliminarPasajero()
     {
+        TestViajes::mostrarPasajeros();
         echo "\nEliminar pasajero \n";
         echo "Ingresa el doc del pasajero: ";
         $doc = trim(fgets(STDIN));
