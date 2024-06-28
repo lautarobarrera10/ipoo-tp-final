@@ -1,11 +1,5 @@
 <?php
 
-
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 include_once "Database.php";
 include_once "Persona.php";
 include_once "ResponsableV.php";
@@ -110,7 +104,7 @@ class TestViajes
         }
     }
     //funcion para validar que sea numerico
-    function es_numerico($valor) {
+    public static function  es_numerico($valor) {
         //retorna true si es numerico y false si es string
         //solo sirve con enteros, los floats los toma como string por el . o ,
  
@@ -130,7 +124,7 @@ class TestViajes
         }
     }
 
-    public static function buscarEmpresa(int $id)
+    public static function buscarEmpresa($id)
     {
         $rta = null;
         $empresa = new Empresa;
@@ -157,7 +151,7 @@ class TestViajes
         }
     }
 
-    public static function agregarEmpresa(string $nombre, string $direccion)
+    public static function agregarEmpresa($nombre, $direccion)
     {
         $empresa = new Empresa;
         $empresa->cargar($nombre, $direccion);
@@ -178,7 +172,7 @@ class TestViajes
         }
     }
 
-    public static function modificarEmpresa(int $id, string $nombre, string $direccion)
+    public static function modificarEmpresa($id, $nombre, $direccion)
     {
         $empresa = new Empresa;
         $respuesta = false;
@@ -217,7 +211,7 @@ class TestViajes
         }
     }
 
-    public static function eliminarEmpresa(int $id)
+    public static function eliminarEmpresa($id)
     {
         $empresa = new Empresa;
         $respuesta = false ;
@@ -255,7 +249,7 @@ class TestViajes
         }
     }
 
-    public static function buscarResponsable(int $numeroEmpleado)
+    public static function buscarResponsable($numeroEmpleado)
     {
         $rta = null;
         $responsable = new ResponsableV;
@@ -282,7 +276,7 @@ class TestViajes
         }
     }
 
-    public static function agregarResponsable(string $nombre, string $apellido, string $documento, int $numeroLicencia)
+    public static function agregarResponsable($nombre, $apellido, $documento, $numeroLicencia)
     {
         $responsable = new ResponsableV;
         $responsable->cargar($nombre, $apellido, $documento, $numeroLicencia);
@@ -307,7 +301,7 @@ class TestViajes
         }
     }
 
-    public static function modificarResponsable(int $numeroEmpleado, int $numeroLicencia, string $nombre, string $apellido)
+    public static function modificarResponsable($numeroEmpleado, $numeroLicencia, $nombre, $apellido)
     {
         $responsable = new ResponsableV;
         $respuesta = false;
@@ -351,7 +345,7 @@ class TestViajes
         }
     }
 
-    public static function eliminarResponsable(int $numeroEmpleado)
+    public static function eliminarResponsable($numeroEmpleado)
     {
         $responsable = new ResponsableV;
         $respuesta = false ;
@@ -390,7 +384,7 @@ class TestViajes
         }
     }
 
-    public static function buscarViaje(int $id)
+    public static function buscarViaje($id)
     {
         $rta = null;
         $viaje = new Viaje;
@@ -417,7 +411,7 @@ class TestViajes
         }
     }
 
-    public static function agregarViaje(string $destino, int $cantidadMaximaDePasajeros, array $colObjPasajeros, int $nroResponsable, float $costoViaje, int $idEmpresa)
+    public static function agregarViaje($destino, $cantidadMaximaDePasajeros, $colObjPasajeros, $nroResponsable, $costoViaje, $idEmpresa)
     {
         $viaje = new Viaje;
         $respuesta = false;
@@ -464,7 +458,7 @@ class TestViajes
         }
     }
 
-    public static function modificarViaje(int $idViaje, string $destino, int $cantidadMaximaDePasajeros, array $colObjPasajeros, int $nroResponsable, float $costoViaje, int $idEmpresa)
+    public static function modificarViaje($idViaje, $destino, $cantidadMaximaDePasajeros, $colObjPasajeros, $nroResponsable, $costoViaje, $idEmpresa)
     {
         $viaje = new Viaje;
         $respuesta = false;
@@ -525,7 +519,7 @@ class TestViajes
         }
     }
 
-    public static function eliminarViaje(int $idViaje)
+    public static function eliminarViaje($idViaje)
     {
         $viaje = new Viaje;
         $respuesta = false ;
@@ -590,7 +584,7 @@ class TestViajes
         }
     }
 
-    public static function agregarPasajero(string $nombre, string $apellido, string $documento, int $telefono, int $idViaje)
+    public static function agregarPasajero($nombre, $apellido, $documento, $telefono, $idViaje)
     {   
         $respuesta = false;
         $viaje = new Viaje;
@@ -632,7 +626,7 @@ class TestViajes
         }
     }
 
-    public static function modificarPasajero(string $documento, string $nombre, string $apellido, int $telefono, int $idViaje)
+    public static function modificarPasajero($documento, $nombre, $apellido, $telefono, $idViaje)
     {
         $pasajero = new Pasajero;
         $respuesta = false;
